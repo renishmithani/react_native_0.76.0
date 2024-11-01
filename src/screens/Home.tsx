@@ -9,8 +9,8 @@ import {
 } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../util/util";
-import { VibrancyView } from "@react-native-community/blur";
+import { isIOS, WINDOW_HEIGHT, WINDOW_WIDTH } from "../util/util";
+import { BlurView, VibrancyView } from "@react-native-community/blur";
 
 function Home() {
   const flatListRef = useRef<FlatList>(null);
@@ -46,6 +46,8 @@ function Home() {
       animated: true
     });
   }, [currIndex]);
+
+  const BlurComponent = isIOS ? VibrancyView : BlurView;
 
   return (
     <View>
@@ -101,12 +103,24 @@ function Home() {
         }}
       >
         <TouchableWithoutFeedback onPress={() => handlePrevButton()}>
-          <VibrancyView
-            blurType="light"
-            blurAmount={10}
-            reducedTransparencyFallbackColor="white"
-            style={{ borderRadius: 8, width: WINDOW_WIDTH - 250 }}
+          <View
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.3)",
+              borderRadius: 8,
+              overflow: "hidden",
+              width: WINDOW_WIDTH - 250
+            }}
           >
+            <BlurComponent
+              blurType="light"
+              blurAmount={10}
+              style={{
+                position: "absolute",
+                height: "100%",
+                width: "100%"
+              }}
+            />
+
             <Text
               style={{
                 color: "black",
@@ -119,15 +133,27 @@ function Home() {
             >
               Prev
             </Text>
-          </VibrancyView>
+          </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => handleNextButton()}>
-          <VibrancyView
-            blurType="light"
-            blurAmount={10}
-            style={{ borderRadius: 8, width: WINDOW_WIDTH - 250 }}
-            reducedTransparencyFallbackColor="white"
+          <View
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.3)",
+              borderRadius: 8,
+              overflow: "hidden",
+              width: WINDOW_WIDTH - 250
+            }}
           >
+            <BlurComponent
+              blurType="light"
+              blurAmount={10}
+              style={{
+                position: "absolute",
+                height: "100%",
+                width: "100%"
+              }}
+            />
+
             <Text
               style={{
                 color: "black",
@@ -140,7 +166,7 @@ function Home() {
             >
               Next
             </Text>
-          </VibrancyView>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     </View>
